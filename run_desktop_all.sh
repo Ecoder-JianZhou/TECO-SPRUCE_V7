@@ -1,0 +1,11 @@
+nohup ./run_desktop_P04.sh > /mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs/P04.log &
+nohup ./run_desktop_P06.sh > /mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs/P06.log &
+nohup ./run_desktop_P07.sh > /mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs/P07.log &
+nohup ./run_desktop_P08.sh > /mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs/P08.log &
+nohup ./run_desktop_P10.sh > /mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs/P10.log &
+nohup ./run_desktop_P11.sh > /mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs/P11.log &
+nohup ./run_desktop_P13.sh > /mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs/P13.log &
+nohup ./run_desktop_P16.sh > /mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs/P16.log &
+nohup ./run_desktop_P17.sh > /mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs/P17.log &
+nohup ./run_desktop_P19.sh > /mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs/P19.log &
+nohup ./run_desktop_P20.sh > /mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs/P20.log &

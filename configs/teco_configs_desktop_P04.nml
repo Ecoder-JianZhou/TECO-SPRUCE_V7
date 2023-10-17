@@ -1,0 +1,42 @@
+&nml_teco_settings
+    case_name   = "test_new_P04"     ! define the case name
+    do_simu     = False           ! simulation mode
+    do_mcmc     = True           ! MCMC for data assimilation mode
+    do_spinup   = False           ! spinup mode
+    do_matrix   = False           ! whether run matrix or not
+    do_restart  = False           ! whether read restart file or not
+    ! simulation selections
+    do_snow     = True           ! do soil snow process or not
+    do_soilphy  = True           ! do soil physics or not
+    do_EBG      = False           ! run EBG or not based on Ma et al., 2022
+    do_ndep     = False           ! N deposit
+    do_leap     = False           ! judge leap year or not
+    ! output selections
+    do_out_hr   = True
+    do_out_day  = True
+    do_out_mon  = True
+    do_out_yr   = True
+
+    dtimes  = 24               ! 24: hourly simulation
+    ! set the input and output path and files
+    inDir             = "/mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/inputs/data_assimilation/P04"
+    outDir            = "/mnt/d/3_case_SPRUCE_data_analysis/2_TECO-SPRUCE_data_assimilation/2_code_based_on_Ma/outputs"
+    ! input files
+    climfile          = "SPRUCE_forcing_plot04.txt"
+    watertablefile    = "watertablefile.txt"
+    snowdepthfile     = "SPRUCE_Snow_Depth_2011-2014.txt"
+    in_restartfile    = "restart.nc"
+    mcmc_configfile   = "mcmc_configs.nml"
+    spinup_configfile = "spinup_configs.nml"
+
+    file_site_params  = "parameters_spruce.nml"
+    count_pft         = 3                           ! max pft: 10
+    spec_names_0        = "Tree", "Shrub", "Sphag"
+    files_pft_params_0  = "parameters_MCMC_tree.nml", "parameters_MCMC_shrub.nml", "parameters_MCMC_shagnum.nml"
+/
+
+&nml_exps
+    Ttreat     = 0.                          ! Temperature treatment, warming in air and soil temperature
+    CO2treat   = 0.                          ! CO2 treatmant, up to CO2treat, not add to Ca. CO2
+    N_fert     = 0.                          ! 5.6 ! (11.2 gN m-2 yr-1, in spring, Duke Forest FACE)
+/

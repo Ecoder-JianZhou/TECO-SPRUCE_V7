@@ -1,0 +1,136 @@
+&nml_params ! Jian: This params for SPRUCE site. If you have special site, you need change it.
+   lat        = 47.5
+   lon        = -93.45	
+   wsmax      = 85.3
+   wsmin      = 0.2
+   LAImax     = 8.0
+   LAImin     = 0.3
+   rdepth     = 150
+   Rootmax    = 500
+   Stemmax    = 1000
+   SapR       = 1
+   SapS       = 0.5
+   SLAx       = 50.3
+   GLmax      = 10.56
+   GRmax      = 21.71
+   Gsmax      = 27.03
+   stom_n     = 2
+   a1         = 8
+   Ds0        = 2000
+   Vcmax0      = 50.38
+   extkU      = 0.51
+   xfang      = 0
+   alpha      = 0.385
+   Tau_Leaf    = 1.05
+   Tau_Wood    = 50.1
+   Tau_Root    = 1.1994
+   Tau_F       = 0.2784
+   Tau_C       = 15.4561
+   Tau_Micro   = 0.3118
+   Tau_SlowSOM = 80.7995
+   Tau_Passive = 200.99
+   gddonset    = 157.85
+   Q10         = 2.74
+   Q10rh       = 2.74
+   Rl0         = 13.03
+   Rs0         = 6.32
+   Rr0         = 34.88
+   r_me        = 0.16
+   Q10pro      = 3.
+   kCH4        = 5.
+   Omax        = 22.80
+   CH4_thre    = 1400.0
+   Tveg        = 7.7
+   Tpro_me     = 10.
+   Toxi        = 10.
+   f            = 0.35
+   bubprob      = 0.27
+   Vmaxfraction = 0.1
+   JV           = 1.5
+   Entrpy		= 660.5								
+   etaL         = 0.6
+   etaW         = 0.15
+   etaR         = 0.85
+   f_F2M        = 0.55
+   f_C2M        = 0.275
+   f_C2S        = 0.275
+   f_M2S        = 0.3
+   f_M2P        = 0.1
+   f_S2P        = 0.2
+   f_S2M        = 0.5
+   f_P2M        = 0.45
+   ! add in plant growth process
+   hmax         = 24.19   ! m
+   hl0          = 0.00019  ! m2/kg C
+   LAIMAX0      = 8.    ! maybe the LAImax
+   la0          = 0.2
+/
+
+&nml_initial_values
+    QC        = 300., 500., 250., 200., 300., 322., 28340., 23120.,   ! leaf,wood,root,fine lit.,coarse lit.,Micr,Slow,Pass
+    CN0       = 50.,  350.,  60.,  40., 300.,  10.,    20.,    12.,
+    NSCmin    = 1.                                                    ! none structural carbon pool
+    Storage   = 60       !32.09                                       ! g C/m2
+    nsc       = 85.35
+    
+    accumulation   = 0.0               ! accumulative storage C?
+    SNvcmax        = 1.0
+
+    ! initial values of Nitrogen pools and C/N ratio
+    N_deposit      = 2.34   ! Nitrogen input (gN/year/m2, it will be transfered to hourly in simulation) 
+    alphaN         = 0.0    ! the transfer of N before littering
+    NSN            = 0.35   ! 6.0 ! 0.35 according to Ma et al., 2022
+    QNminer        = 1.2
+    N_deficit      = 0.
+
+    ! for soil conditions, physical processes
+    thksl          = 10., 10., 10., 10., 10., 20., 20., 20., 20., 20.,    ! thickness of every soil layer
+    ! FRLEN             = (/0.75,0.2,0.02,0.015,0.005,0.0,0.0,0.0,0.0,0.0/)  ! ratio of roots in every layer, Oak Ridge FACE: Shuang
+    FRLEN          = 0.75, 0.2, 0.02, 0.02, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0
+    ! liq_water         = (/0.01, 0.056, 0.056, 0.056, 0.056, 0.056, 0.056,0.056,0.056,0.056/)    ! unit m
+    liq_water      = 0.0355, 0.056, 0.056, 0.056, 0.056, 0.113, 0.113, 0.113, 0.113, 0.113,    ! unit m
+    fwsoil         = 1.0                                                ! update in soilwater module
+    topfws         = 1.0
+    omega          = 1.0
+    zwt            = 0.0
+    infilt         = 0.
+    ! soil thermal dynamics in Yuanyuanversion
+    sftmp          = -0.
+    Tsnow          = -20.
+    Twater         = 0.0
+    Tice           = 0.0
+    G                   = 20.5
+    snow_dsim      = 0.575
+    dcount         = 50.
+    dcount_soil    = 50.
+    ice_tw         = 0.0   
+    Tsoill         = -0.09, 0.73, 1.3, 1.95, 2.3, 3., 4., 4.5, 5., 5.98,  ! JJ MS thksl 10 20 30 40 50 70 90 110 130 150...  
+    ice            = 0.021, 0.0, 0., 0., 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    shcap_snow     = 1000000.  ! tuneice worker better
+    condu_snow     = 0.1
+    condu_b        = 0.08  ! yuanyuan soil thermal version value  ... int: this par is not sensitive to CWE
+    depth_ex       = 0.05
+    diff_s         = 1.
+    diff_snow      = 1.8    ! .. int diffusivity of snow not sensitive for ice
+    albedo_snow    = 0.7
+    resht          = 40.
+    thd_snow_depth = 4.0
+    b_bound        = 100.                            ! b_bound=0.1     !tuneice  not sensitive for ice
+    infilt_rate    = 0.001
+    fa             = 1
+    fsub           = 0.1
+    ! rho_snow=100.
+    rho_snow       = 80.        !tuneice
+    decay_m        = 2.2192      !aging factor on snow melting
+    !----------------------------------------------------------------
+    
+    ! methane module. update: Shuang methane bog species even more shallowly rooted than the tundra. add initials for methane module Shuang version
+    CH4_V  = 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.
+    CH4    = 0.000152, 0.05, 0.6, 0.7, 0.7, 1.7, 1.7, 1.7, 1.7, 1.7
+    Vp     = 0., 0., 0., 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01,             !assume in the very beginning no bubbles exist in the first three layers (30cm)
+    bubble_methane_tot  = 0.
+    Nbub      = 100.
+    ! bubprob      = 0.1
+    ! Vmaxfraction = 0.1
+    depth_1   = 10.0                                  !calculate soil depth unit cm
+/

@@ -1,0 +1,11 @@
+nohup ./server66/run_server66_P04.sh > /home/zhou_j/docs_SPRUCE/outputs/P04.log &
+nohup ./server66/run_server66_P06.sh > /home/zhou_j/docs_SPRUCE/outputs/P06.log &
+nohup ./server66/run_server66_P07.sh > /home/zhou_j/docs_SPRUCE/outputs/P07.log &
+nohup ./server66/run_server66_P08.sh > /home/zhou_j/docs_SPRUCE/outputs/P08.log &
+nohup ./server66/run_server66_P10.sh > /home/zhou_j/docs_SPRUCE/outputs/P10.log &
+nohup ./server66/run_server66_P11.sh > /home/zhou_j/docs_SPRUCE/outputs/P11.log &
+nohup ./server66/run_server66_P13.sh > /home/zhou_j/docs_SPRUCE/outputs/P13.log &
+nohup ./server66/run_server66_P16.sh > /home/zhou_j/docs_SPRUCE/outputs/P16.log &
+nohup ./server66/run_server66_P17.sh > /home/zhou_j/docs_SPRUCE/outputs/P17.log &
+nohup ./server66/run_server66_P19.sh > /home/zhou_j/docs_SPRUCE/outputs/P19.log &
+nohup ./server66/run_server66_P20.sh > /home/zhou_j/docs_SPRUCE/outputs/P20.log &

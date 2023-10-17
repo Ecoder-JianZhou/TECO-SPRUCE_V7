@@ -1,0 +1,42 @@
+&nml_teco_settings
+    case_name   = "test_new"     ! define the case name
+    do_simu     = True           ! simulation mode
+    do_mcmc     = False           ! MCMC for data assimilation mode
+    do_spinup   = False           ! spinup mode
+    do_matrix   = False           ! whether run matrix or not
+    do_restart  = False           ! whether read restart file or not
+    ! simulation selections
+    do_snow     = True           ! do soil snow process or not
+    do_soilphy  = True           ! do soil physics or not
+    do_EBG      = False           ! run EBG or not based on Ma et al., 2022
+    do_ndep     = False           ! N deposit
+    do_leap     = False           ! judge leap year or not
+    ! output selections
+    do_out_hr   = True
+    do_out_day  = True
+    do_out_mon  = True
+    do_out_yr   = True
+
+    dtimes  = 24               ! 24: hourly simulation
+    ! set the input and output path and files
+    inDir             = "/Users/jianzhou/Documents/2_one_driver/OneDrive - Cornell University/1_MyWorks/3_SPRUCE_data_assimilation/inputs"
+    outDir            = "/Users/jianzhou/Documents/1_MyWorks/1_SPRUCE_cases/1_SPRUCE_DA/1_code_DA/outputs"
+    ! input files
+    climfile          = "SPRUCE_forcing.txt"
+    watertablefile    = "watertablefile.txt"
+    snowdepthfile     = "SPRUCE_Snow_Depth_2011-2014.txt"
+    in_restartfile    = "restart.nc"
+    mcmc_configfile   = "mcmc_configs.nml"
+    spinup_configfile = "spinup_configs.nml"
+
+    file_site_params  = "parameters.nml"
+    count_pft         = 3                           ! max pft: 10
+    spec_names_0        = "Tree", "Shrub", "Sphag"
+    files_pft_params_0  = "parameters.nml", "parameters.nml", "parameters.nml"
+/
+
+&nml_exps
+    Ttreat     = 0.                          ! Temperature treatment, warming in air and soil temperature
+    CO2treat   = 0.                          ! CO2 treatmant, up to CO2treat, not add to Ca. CO2
+    N_fert     = 0.                          ! 5.6 ! (11.2 gN m-2 yr-1, in spring, Duke Forest FACE)
+/

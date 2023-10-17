@@ -1,0 +1,99 @@
+&nml_mcmc_settings
+    nDAsimu        = 200000                ! how many time to do data assimilation
+    search_scale   = 0.1               ! modify the scale of searching the new parameters
+    ncov           = 100                ! how many times of upgraded that change to use coveriance to create new parameters
+    nRand          = 100
+    do_mc_out_hr   = False
+    do_mc_out_day  = True
+    do_mc_out_mon  = False
+    do_mc_out_yr   = False
+    nSpecParams    = 60
+/
+
+&nml_obsfiles
+    obsfile_ANPP_Shrub_y = "observation_files/obsfile_anpp_shrub_y.txt"
+    obsfile_ANPP_Tree_y  = "observation_files/obsfile_anpp_tree_y.txt"
+    obsfile_NPP_sphag_y  = "observation_files/obsfile_npp_shag_y.txt"
+    obsfile_BNPP_y       = "observation_files/obsfile_bnpp_y.txt"        ! tree  + Shrub
+    obsfile_er_d         = "observation_files/obsfile_er_d.txt"          ! Shrub + sphag.
+    obsfile_er_h         = "observation_files/obsfile_er_h.txt"          ! Shrub + sphag.
+    obsfile_gpp_d        = "observation_files/obsfile_gpp_d.txt"         ! Shrub + sphag.
+    obsfile_nee_d        = "observation_files/obsfile_nee_d.txt"         ! Shrub + sphag.
+    obsfile_nee_h        = "observation_files/obsfile_nee_h.txt"
+    obsfile_LAI_d        = "observation_files/obsfile_LAI_d.txt"         ! tree  + Shrub
+    !
+    obsfile_leaf_mass_shrub_y = "observation_files/obsfile_leaf_mass_shrub_y.txt"
+    obsfile_stem_mass_shrub_y = "observation_files/obsfile_stem_mass_shrub_y.txt"
+    obsfile_leaf_resp_shrub_d = "observation_files/obsfile_leaf_resp_shrub_d.txt"
+    obsfile_leaf_resp_tree_d  = "observation_files/obsfile_leaf_resp_tree_d.txt"
+    ! methane
+    obsfile_ch4_d        = "observation_files/obsfile_ch4_d.txt"
+    obsfile_ch4_h        = "observation_files/obsfile_ch4_h.txt"
+    ! 
+    obsfile_CN_shag_d     = "observation_files/obsfile_CN_shag_d.txt"
+    obsfile_photo_shrub_d = "observation_files/obsfile_photo_shrub_d.txt"
+    obsfile_photo_tree_d  = "observation_files/obsfile_photo_tree_d.txt"
+/
+
+&nml_param_names
+   parnames_1  = "lat"
+   parnames_2  = "lon" 
+   parnames_3  = "wsmax" 
+   parnames_4  = "wsmin"
+   parnames_5  = "LAIMAX" 
+   parnames_6  = "LAIMIN"
+   parnames_7  = "rdepth" 
+   parnames_8  = "Rootmax"
+   parnames_9  = "Stemmax" 
+   parnames_10 = "SapR" 
+   parnames_11 = "SapS" 
+   parnames_12 = "SLAx"
+   parnames_13 = "GLmax" 
+   parnames_14 = "GRmax" 
+   parnames_15 = "Gsmax" 
+   parnames_16 = "stom_n"
+   parnames_17 = "a1" 
+   parnames_18 = "Ds0"  
+   parnames_19 = "Vcmax0"
+   parnames_20 = "extkU" 
+   parnames_21 = "xfang" 
+   parnames_22 = "alpha" 
+   parnames_23 = "Tau_Leaf" 
+   parnames_24 = "Tau_Wood" 
+   parnames_25 = "Tau_Root" 
+   parnames_26 = "Tau_F" 
+   parnames_27 = "Tau_C" 
+   parnames_28 = "Tau_Micro"
+   parnames_29 = "Tau_SlowSOM"
+   parnames_30 = "Tau_Passive"
+   parnames_31 = "gddonset"
+   parnames_32 = "Q10"  
+   parnames_33 = "Q10rh" 
+   parnames_34 = "Rl0" 
+   parnames_35 = "Rs0" 
+   parnames_36 = "Rr0" 
+   parnames_37 = "r_me" 
+   parnames_38 = "Q10pro" 
+   parnames_39 = "kCH4" 
+   parnames_40 = "Omax" 
+   parnames_41 = "CH4_thre" 
+   parnames_42 = "Tveg" 
+   parnames_43 = "Tpro_me" 
+   parnames_44 = "Toxi" 
+   parnames_45 = "f"  
+   parnames_46 = "bubprob" 
+   parnames_47 = "Vmaxfraction"
+   parnames_48 = "JV" 
+   parnames_49 = "Entrpy"
+   parnames_50 = "etaL" 
+   parnames_51 = "etaW" 
+   parnames_52 = "etaR" 
+   parnames_53 = "f_F2M" 
+   parnames_54 = "f_C2M" 
+   parnames_55 = "f_C2S" 
+   parnames_56 = "f_M2S" 
+   parnames_57 = "f_M2P" 
+   parnames_58 = "f_S2P" 
+   parnames_59 = "f_S2M" 
+   parnames_60 = "f_P2M"  
+/
