@@ -916,8 +916,8 @@ module mcmc_mod
                                                     (outVars_h%allSpec(2)%ra  + outVars_h%allSpec(3)%ra  + outVars_h%rh))*24)         ! shrub + sphag.
         call GetSimuData_var(vars4MCMC%LAI_d,       (outVars_d%allSpec(1)%LAI + outVars_d%allSpec(2)%LAI)/2)         ! tree  + Shrub
         !
-        call GetSimuData_var(vars4MCMC%leaf_mass_shrub_y, outVars_y%allSpec(2)%cleaf*0.48)
-        call GetSimuData_var(vars4MCMC%stem_mass_shrub_y, outVars_y%allSpec(2)%cStem*0.48)
+        call GetSimuData_var(vars4MCMC%leaf_mass_shrub_y, outVars_y%allSpec(2)%cleaf/0.48)
+        call GetSimuData_var(vars4MCMC%stem_mass_shrub_y, outVars_y%allSpec(2)%cStem/0.48)
         call GetSimuData_var(vars4MCMC%leaf_resp_shrub_d, outVars_d%allSpec(2)%ra*24) 
         call GetSimuData_var(vars4MCMC%leaf_resp_tree_d,  outVars_d%allSpec(1)%ra*24) 
         ! methane

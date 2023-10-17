@@ -9,7 +9,7 @@ module mcmc
     integer npar4DA, ipar, covexist
     
     real fact_rejet
-    real J_last, J_new, accept_rate
+    real J_last(5), J_new(5), accept_rate
     integer new, reject
     logical do_cov2createNewPars, do_cov
 
@@ -305,8 +305,8 @@ module mcmc
 
     subroutine costFuncObs()
         implicit none
-        real J_cost, delta_J, cs_rand
-        integer :: ipft, npft
+        real J_cost, delta_J(5), cs_rand
+        integer :: ipft, npft, iaccep(5), i
         
         J_new = 0
 
@@ -314,7 +314,7 @@ module mcmc
         if(vars4MCMC%ANPP_Shrub_y%existOrNot)then
             call CalculateCost(vars4MCMC%ANPP_Shrub_y%mdData(:,4), vars4MCMC%ANPP_Shrub_y%obsData(:,4),&
                  vars4MCMC%ANPP_Shrub_y%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(2) = J_new(2) + J_cost
         endif
         ! print*, "J_new1: ", J_new
         ! print*, "test1:",vars4MCMC%ANPP_Shrub_y%mdData(:,4), vars4MCMC%ANPP_Shrub_y%obsData(:,4),&
@@ -324,7 +324,7 @@ module mcmc
         if(vars4MCMC%ANPP_Tree_y%existOrNot)then
             call CalculateCost(vars4MCMC%ANPP_Tree_y%mdData(:,4), vars4MCMC%ANPP_Tree_y%obsData(:,4),&
                  vars4MCMC%ANPP_Tree_y%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(1) = J_new(1) + J_cost
         endif
         ! print*, "J_new2: ", J_new
         ! print*, "test1:",vars4MCMC%ANPP_Tree_y%mdData(:,4), vars4MCMC%ANPP_Tree_y%mdData(:,1),&
@@ -334,7 +334,7 @@ module mcmc
         if(vars4MCMC%NPP_sphag_y%existOrNot)then
             call CalculateCost(vars4MCMC%NPP_sphag_y%mdData(:,4), vars4MCMC%NPP_sphag_y%obsData(:,4),&
                  vars4MCMC%NPP_sphag_y%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(3) = J_new(3) + J_cost
         endif
         ! print*, "J_new3: ", J_new
 
@@ -342,14 +342,14 @@ module mcmc
         if(vars4MCMC%BNPP_y%existOrNot)then
             call CalculateCost(vars4MCMC%BNPP_y%mdData(:,4), vars4MCMC%BNPP_y%obsData(:,4),&
                  vars4MCMC%BNPP_y%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(4) = J_new(4) + J_cost
         endif
         ! print*, "J_new4: ", J_new
         ! er_d          ! shrub + sphag.
         if(vars4MCMC%er_d%existOrNot)then
             call CalculateCost(vars4MCMC%er_d%mdData(:,4), vars4MCMC%er_d%obsData(:,4),&
                  vars4MCMC%er_d%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(4) = J_new(4) + J_cost
         endif
         ! print*, "J_new5: ", J_new
         ! er_h          ! shrub + sphag.
@@ -357,35 +357,35 @@ module mcmc
         if(vars4MCMC%er_h%existOrNot)then
             call CalculateCost(vars4MCMC%er_h%mdData(:,4), vars4MCMC%er_h%obsData(:,4),&
                  vars4MCMC%er_h%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(4) = J_new(4) + J_cost
         endif
         ! print*, "J_new6: ", J_new
         ! gpp_d         ! Shrub + sphag.
         if(vars4MCMC%gpp_d%existOrNot)then
             call CalculateCost(vars4MCMC%gpp_d%mdData(:,4), vars4MCMC%gpp_d%obsData(:,4),&
                  vars4MCMC%gpp_d%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(4) = J_new(4) + J_cost
         endif
         ! print*, "J_new7: ", J_new
         ! nee_d         ! Shrub + sphag.
         if(vars4MCMC%nee_d%existOrNot)then
             call CalculateCost(vars4MCMC%nee_d%mdData(:,4), vars4MCMC%nee_d%obsData(:,4),&
                  vars4MCMC%nee_d%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(4) = J_new(4) + J_cost
         endif
         ! print*, "J_new8: ", J_new
         ! nee_h         ! shrub + sphag.
         if(vars4MCMC%nee_h%existOrNot)then
             call CalculateCost(vars4MCMC%nee_h%mdData(:,4), vars4MCMC%nee_h%obsData(:,4),&
                  vars4MCMC%nee_h%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(4) = J_new(4) + J_cost
         endif
         ! print*, "J_new9: ", J_new
         ! LAI_d         ! tree  + Shrub
         if(vars4MCMC%LAI_d%existOrNot)then
             call CalculateCost(vars4MCMC%LAI_d%mdData(:,4), vars4MCMC%LAI_d%obsData(:,4),&
                  vars4MCMC%LAI_d%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(4) = J_new(4) + J_cost
         endif
         ! print*, "J_new10: ", J_new
 
@@ -393,7 +393,7 @@ module mcmc
         if(vars4MCMC%leaf_mass_shrub_y%existOrNot)then
             call CalculateCost(vars4MCMC%leaf_mass_shrub_y%mdData(:,4), vars4MCMC%leaf_mass_shrub_y%obsData(:,4),&
                  vars4MCMC%leaf_mass_shrub_y%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(2) = J_new(2) + J_cost
         endif
         ! print*, "J_new11: ", J_new
 
@@ -401,7 +401,7 @@ module mcmc
         if(vars4MCMC%stem_mass_shrub_y%existOrNot)then
             call CalculateCost(vars4MCMC%stem_mass_shrub_y%mdData(:,4), vars4MCMC%stem_mass_shrub_y%obsData(:,4),&
                  vars4MCMC%stem_mass_shrub_y%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(2) = J_new(2) + J_cost
         endif
         ! print*, "J_new12: ", J_new
 
@@ -409,7 +409,7 @@ module mcmc
         if(vars4MCMC%leaf_resp_shrub_d%existOrNot)then
             call CalculateCost(vars4MCMC%leaf_resp_shrub_d%mdData(:,4), vars4MCMC%leaf_resp_shrub_d%obsData(:,4),&
                  vars4MCMC%leaf_resp_shrub_d%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(2) = J_new(2) + J_cost
         endif
         ! print*, "J_new13: ", J_new
 
@@ -417,29 +417,29 @@ module mcmc
         if(vars4MCMC%leaf_resp_tree_d%existOrNot)then
             call CalculateCost(vars4MCMC%leaf_resp_tree_d%mdData(:,4), vars4MCMC%leaf_resp_tree_d%obsData(:,4),&
                  vars4MCMC%leaf_resp_tree_d%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(1) = J_new(1) + J_cost
         endif
         ! print*, "J_new14: ", J_new
         ! ch4_d 
-        if(vars4MCMC%ch4_d%existOrNot)then
-            call CalculateCost(vars4MCMC%ch4_d%mdData(:,4), vars4MCMC%ch4_d%obsData(:,4),&
-                 vars4MCMC%ch4_d%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
-        endif
+        ! if(vars4MCMC%ch4_d%existOrNot)then
+        !     call CalculateCost(vars4MCMC%ch4_d%mdData(:,4), vars4MCMC%ch4_d%obsData(:,4),&
+        !          vars4MCMC%ch4_d%obsData(:,5), J_cost)
+        !     J_new(5) = J_new(5) + J_cost
+        ! endif
         ! print*, "J_new15: ", J_new
         ! ch4_h
-        if(vars4MCMC%ch4_h%existOrNot)then
-            call CalculateCost(vars4MCMC%ch4_h%mdData(:,4), vars4MCMC%ch4_h%obsData(:,4),&
-                 vars4MCMC%ch4_h%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
-        endif
+        ! if(vars4MCMC%ch4_h%existOrNot)then
+        !     call CalculateCost(vars4MCMC%ch4_h%mdData(:,4), vars4MCMC%ch4_h%obsData(:,4),&
+        !          vars4MCMC%ch4_h%obsData(:,5), J_cost)
+        !     J_new(5) = J_new(5) + J_cost
+        ! endif
         ! print*, "J_new16: ", J_new
         
         ! CN_shag_d 
         if(vars4MCMC%CN_shag_d%existOrNot)then
             call CalculateCost(vars4MCMC%CN_shag_d%mdData(:,4), vars4MCMC%CN_shag_d%obsData(:,4),&
                  vars4MCMC%CN_shag_d%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(3) = J_new(3) + J_cost
         endif
         ! print*, "J_new17: ", J_new
 
@@ -447,7 +447,7 @@ module mcmc
         if(vars4MCMC%photo_shrub_d%existOrNot)then
             call CalculateCost(vars4MCMC%photo_shrub_d%mdData(:,4), vars4MCMC%photo_shrub_d%obsData(:,4),&
                  vars4MCMC%photo_shrub_d%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(2) = J_new(2) + J_cost
         endif
         ! print*, "J_new18: ", J_new
 
@@ -455,23 +455,31 @@ module mcmc
         if(vars4MCMC%photo_tree_d%existOrNot)then
             call CalculateCost(vars4MCMC%photo_tree_d%mdData(:,4), vars4MCMC%photo_tree_d%obsData(:,4),&
                  vars4MCMC%photo_tree_d%obsData(:,5), J_cost)
-            J_new = J_new + J_cost
+            J_new(1) = J_new(1) + J_cost
         endif
         ! print*, "J_new19: ", J_new
         ! ------------------------------------------------------------------------------------
         ! write(*,*) "here2",J_new
-        if(J_new .eq. 0) then ! no data is available
-            delta_J = -0.1
-        else
-            delta_J = J_new - J_last
-        endif
+        iaccep = 0
+        do i = 1,4
+            if(J_new(i) .eq. 0) then ! no data is available
+                delta_J(i) = -0.1
+            else
+                delta_J(i) = J_new(i) - J_last(i)
+            endif
 
-        delta_J = delta_J/5
+            delta_J(i) = delta_J(i)/10
 
-        call random_number(cs_rand)
-        if(AMIN1(1.0, exp(-delta_J)) .gt. cs_rand)then
-            upgraded = upgraded + 1
-            J_last = J_new
+            call random_number(cs_rand)
+            if(AMIN1(1.0, exp(-delta_J(i))) .gt. cs_rand)then
+                iaccep(i) = iaccep(i) + 1
+            endif
+        enddo
+        if(AMIN1(1.0, exp(-sum(delta_J))) .gt. cs_rand)then
+            if (sum(iaccep(1:3)) .eq. 3)then
+                upgraded = upgraded + 1
+                J_last = J_new
+            endif
         endif
         accept_rate = real(upgraded)/real(iDAsimu)
     end subroutine costFuncObs
@@ -491,11 +499,13 @@ module mcmc
             if(datObs4MCMC(iLine) .gt. -999 .and. datMod4MCMC(iLine) .gt. -999)then
                 nCost    = nCost + 1   
                 dObsSimu = datMod4MCMC(iLine) - datObs4MCMC(iLine) 
-                if (stdObs4MCMC(iLine) < 0.001) then 
-                    std4cal = 0.5
-                else
-                    std4cal = stdObs4MCMC(iLine)
-                endif
+                ! if (stdObs4MCMC(iLine) < 0.5) then 
+                !     std4cal = 0.5
+                ! else
+                !     std4cal = stdObs4MCMC(iLine)
+                ! endif
+                std4cal  = abs(0.2*datObs4MCMC(iLine))
+                if (std4cal <=0) std4cal = 1
                 JCost    = JCost + (dObsSimu*dObsSimu)/(2*std4cal)
             endif
         enddo
