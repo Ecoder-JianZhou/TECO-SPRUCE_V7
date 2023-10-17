@@ -4,15 +4,11 @@ module MCMC_outputs
 #endif
     use datatypes
     use mcmc_mod
+    use driver
     implicit none
     ! This part of results will be stored in CSV-format
-
-    type params_sets
-        real, allocatable :: tot_paramsets(:,:), upg_paramsets(:,:), sel_paramsets(:,:) 
-    end type params_sets
-    type(params_sets), allocatable :: arr_params_set(:)
     
-    CHARACTER(len=4) :: str_startyr, str_endyr
+    CHARACTER(len=4) :: str_startyr_1, str_endyr_1
     ! integer, parameter :: nRand = 20
     ! integer, dimension(nRand) :: rand_number
     integer, allocatable :: rand_number(:)
@@ -26,8 +22,8 @@ contains
 
         allocate(rand_number(nRand))
 
-        write(str_startyr,"(I4)")forcing(1)%year
-        write(str_endyr,"(I4)")forcing(nforcing)%year
+        write(str_startyr_1,"(I4)")forcing(1)%year
+        write(str_endyr_1,"(I4)")forcing(nforcing)%year
 
         allocate(arr_params_set(count_pft))
         do ipft = 1, count_pft
@@ -39,10 +35,10 @@ contains
         !     call allocate_mcmc_outs_type(nRand, nHours,  sel_paramsets_outs_h)
         !     call allocate_mcmc_outs_type(nDAsimu, nHours,  tot_paramsets_outs_h)
         ! endif
-        if (do_mc_out_day) then
-            call allocate_mcmc_outs_type(nRand, nDays,   sel_paramsets_outs_d)
-            call allocate_mcmc_outs_type(nDAsimu, nDays,   tot_paramsets_outs_d)
-        endif
+        ! if (do_mc_out_day) then
+        !     call allocate_mcmc_outs_type(nRand, nDays,   sel_paramsets_outs_d)
+        !     call allocate_mcmc_outs_type(nDAsimu, nDays,   tot_paramsets_outs_d)
+        ! endif
         ! if (do_mc_out_mon) then
         !     call allocate_mcmc_outs_type(nRand, nMonths, sel_paramsets_outs_m)
         !     call allocate_mcmc_outs_type(nDAsimu, nMonths, tot_paramsets_outs_m)
@@ -50,16 +46,17 @@ contains
         ! allocate the total simulation results
     end subroutine init_mcmc_outputs
 
-    subroutine mcmc_param_outputs(nUpgraded, npar4DA, parnames)!, DAparidx)
+    subroutine mcmc_param_outputs(nUpgraded, npar4DA, parnames0, vegn)!, DAparidx)
         implicit none
         integer, intent(in) :: nUpgraded, npar4DA
+        type(vegn_tile_type), intent(inout) :: vegn
         integer nBuilt_in, ipar, nline, iline, inum
         character(250) :: outfile_mc_ParamSets
-        character(*), intent(in) :: parnames(:)
+        character(*), intent(in) :: parnames0(:)
         ! integer, allocatable :: DAparidx(:)
         ! character(20), allocatable :: DA_parname(:)
         character(1200) :: header_line
-        integer :: ipft, npft
+        integer :: ipft, npft, isimu
 
         ! allocate(DA_parname(npar4DA))
         
@@ -94,9 +91,9 @@ contains
                 ! if (do_mc_out_hr) then
                 !     call select_mcmc_simu_outputs(rand_number(inum), inum, tot_paramsets_outs_h, sel_paramsets_outs_h)
                 ! endif
-                if (do_mc_out_day) then
-                    call select_mcmc_simu_outputs(rand_number(inum), inum, tot_paramsets_outs_d, sel_paramsets_outs_d)
-                endif
+                ! if (do_mc_out_day) then
+                !     call select_mcmc_simu_outputs(rand_number(inum), inum, tot_paramsets_outs_d, sel_paramsets_outs_d)
+                ! endif
                 ! if (do_mc_out_mon) then
                 !     call select_mcmc_simu_outputs(rand_number(inum), inum, tot_paramsets_outs_m, sel_paramsets_outs_m)
                 ! endif
@@ -112,22 +109,52 @@ contains
             close(137)
         enddo
 
+        ! run teco model according to the select variables
+        do_out_hr   = .False.
+        do_out_day  = .True.
+        do_out_mon  = .False.
+        do_out_yr   = .False.
+        do isimu = 1, nRand
+            do ipft = 1, count_pft   
+                ! update the parameters
+                do ipar = 1, npar4DA
+                    mc_parvals(ipft)%parval(mc_DApar(ipft)%DAparidx(ipar)) = arr_params_set(ipft)%sel_paramsets(isimu, ipar) !mc_DApar(ipft)%DApar(ipar)
+                enddo
+                call renewMDpars(mc_parvals(ipft)%parval, mc_in_params(ipft))          ! call update parameters in TECO model
+            enddo
+            
+            ! call initialize()           ! initialize the TECO model 
+            if(allocated(vegn%allSp)) then
+                do ipft = 1, count_pft
+                    call initilize_site(mc_in_params(ipft), mc_init_params(ipft))  ! Jian: this version not separate the site parameters and pft parameters
+                    call initilize_spec(vegn%allSp(ipft), mc_in_params(ipft), mc_init_params(ipft))
+                    if (ipft .eq. 1) then
+                        vegn%LAImax = vegn%allSp(ipft)%LAImax
+                        vegn%LAImin = vegn%allSp(ipft)%LAImin
+                    else
+                        vegn%LAImax = AMAX1(vegn%LAImax, vegn%allSp(ipft)%LAImax)
+                        vegn%LAImin = AMAX1(vegn%LAImin, vegn%allSp(ipft)%LAImin)
+                    endif
+                enddo
+            endif ! finish ! initialize the TECO model
+            write(mc_str_n, "(I0.3)") isimu
+            call teco_simu(vegn, .True.)            ! run the model
+        enddo
+
         ! save the selected simulations to nc format results
         ! if (do_mc_out_hr) then
         !     call write_outputs_nc(outDir_mcmc_h, nRand, nHours,  sel_paramsets_outs_h, "hourly")
         ! endif
-        if (do_mc_out_day) then
-            call write_outputs_nc(outDir_mcmc_d, nRand, nDays,   sel_paramsets_outs_d, "daily")
-        endif
+        ! if (do_mc_out_day) then
+        !     call write_outputs_nc(outDir_mcmc_d, nRand, nDays,   sel_paramsets_outs_d, "daily")
+        ! endif
         ! if (do_mc_out_mon) then
         !     call write_outputs_nc(outDir_mcmc_m, nRand, nMonths, sel_paramsets_outs_m, "monthly")
         ! endif
 
         ! deallocate
         ! deallocate(DA_parname)
-        do ipft = 1, count_pft
-            deallocate(arr_params_set(ipft)%upg_paramsets)
-        enddo
+        
     end subroutine mcmc_param_outputs
 
     subroutine select_mcmc_simu_outputs(idx_tot, idx_sel, total_simus, selected_simus)
@@ -547,7 +574,7 @@ contains
         
         allocate(character(len=200+len(outfile)) :: nc_fileName)
         nc_fileName = adjustl(trim(outfile))//"/"//adjustl(trim(varName))//"_"//freq//"_TECO-SPRUCE_"//&
-            & adjustl(trim(case_name))//"_"//adjustl(trim(str_startyr))//"-"//adjustl(trim(str_endyr))//".nc"   
+            & adjustl(trim(case_name))//"_"//adjustl(trim(str_startyr_1))//"-"//adjustl(trim(str_endyr_1))//".nc"   
         
         !Create the netCDF file.
         CALL check_mc(nf90_create(nc_fileName, NF90_CLOBBER, ncid))
@@ -570,11 +597,11 @@ contains
         
         !Add attributes
         if (freq .eq. "hourly") then
-            timeUnit = "hours since "//adjustl(trim(str_startyr))//"-01-01 00:00:00"
+            timeUnit = "hours since "//adjustl(trim(str_startyr_1))//"-01-01 00:00:00"
         else if (freq .eq. "daily") then
-            timeUnit = "days since "//adjustl(trim(str_startyr))//"-01-01 00:00:00"
+            timeUnit = "days since "//adjustl(trim(str_startyr_1))//"-01-01 00:00:00"
         else if (freq .eq. "monthly") then
-            timeUnit = "months since "//adjustl(trim(str_startyr))//"-01-01 00:00:00"
+            timeUnit = "months since "//adjustl(trim(str_startyr_1))//"-01-01 00:00:00"
         end if
         
         ! call check_mc(nf90_put_att(ncid,simuvarid,"",adjustl(trim(timeUnit))))

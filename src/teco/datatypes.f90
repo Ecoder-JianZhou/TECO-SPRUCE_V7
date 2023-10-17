@@ -55,6 +55,8 @@ module datatypes
     ! ---------------------------------------------------------------------------------------
     integer :: nHours, nDays, nMonths, nYears         ! how many iterations hourly, daily, monthly and yearly
     ! --------------------------
+    ! add to set out
+    character(10) :: mc_str_n
     
     integer, parameter :: nlayers = 10                ! how many layers
     real,    parameter :: pi      = 3.1415926

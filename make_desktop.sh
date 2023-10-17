@@ -5,8 +5,8 @@ gfortran  -g -fbacktrace -Wall -fcheck=all -cpp -DUSE_NETCDF\
     src/teco/vegetation.f90 \
     src/teco/transfer.f90 \
     src/tools/mcmc_mod.f90 \
-    src/tools/mcmc_outputs.f90  \
     src/teco/driver.f90 \
+    src/tools/mcmc_outputs.f90  \
     src/tools/mcmc.f90   \
     `# src/tools/spinup.f90`  \
     src/main.f90 \

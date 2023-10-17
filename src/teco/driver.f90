@@ -39,7 +39,7 @@ module driver
         ! initilize the output 
         do_out_csv = do_out_csv_0
         if(do_out_csv) then
-            allocate(character(len=200+len(outDir_csv)) :: csv_fileName)
+            allocate(character(len=300+len(outDir_csv)) :: csv_fileName)
             call def_header(header_csv)
             if(do_out_hr) then
                 unit_h = 3987

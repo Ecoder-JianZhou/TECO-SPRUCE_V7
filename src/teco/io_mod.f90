@@ -210,11 +210,22 @@ module io_mod
         character(*), intent(in) :: out_path, str_freq
         character(*), intent(inout) :: csv_fileName
 
-        csv_fileName = adjustl(trim(out_path))//"/TECO-SPRUCE_"//adjustl(trim(case_name))//"_"//str_freq//".csv"
+        if(do_mcmc)then
+            csv_fileName = adjustl(trim(out_path))//"/TECO-SPRUCE_"//adjustl(trim(case_name))//"_"//&
+                &str_freq//"_"//adjustl(trim(mc_str_n))//".csv"
+! windows
+#if defined(WIN32) || defined(WIN64) || defined(_WIN32) || defined(_WIN64)
+        csv_fileName = adjustl(trim(out_path))//"\TECO-SPRUCE_"//adjustl(trim(case_name))//"_"//&
+                &str_freq//"_"//adjustl(trim(mc_str_n))//".csv"
+#endif
+        else
+            csv_fileName = adjustl(trim(out_path))//"/TECO-SPRUCE_"//adjustl(trim(case_name))//"_"//str_freq//".csv"
 ! windows
 #if defined(WIN32) || defined(WIN64) || defined(_WIN32) || defined(_WIN64)
         csv_fileName = adjustl(trim(out_path))//"\TECO-SPRUCE_"//adjustl(trim(case_name))//"_"//str_freq//".csv"
 #endif
+        endif
+
         return
     end subroutine def_csv_fileName
 

@@ -13,8 +13,7 @@ module mcmc
     integer new, reject
     logical do_cov2createNewPars, do_cov
 
-    type(nml_params_data_type),allocatable     :: mc_in_params(:)     !   in_params for MCMC
-    type(nml_initValue_data_type), allocatable :: mc_init_params(:)   ! init_params for MCMC
+
 
     contains
     subroutine init_mcmc(files_vegn_params, vegn)
@@ -158,7 +157,6 @@ module mcmc
             endif ! finish ! initialize the TECO model
 
             call teco_simu(vegn, .False.)            ! run the model
-            if (iDAsimu .eq. nDAsimu) call teco_simu(vegn, .True.)
             
             temp_upgraded = upgraded
             call costFuncObs()          ! calculate the cost between observations and simulations
@@ -229,7 +227,7 @@ module mcmc
         enddo
 
         ! summary
-        call mcmc_param_outputs(upgraded, npar4DA, parnames)!, mc_DApar)
+        call mcmc_param_outputs(upgraded, npar4DA, parnames, vegn)!, mc_DApar)  ! update the variable of 
     end subroutine run_mcmc
 
     subroutine generate_newPar()
@@ -822,6 +820,7 @@ module mcmc
         do ipft = 1, npft
             if(allocated(arr_params_set(ipft)%tot_paramsets)) deallocate(arr_params_set(ipft)%tot_paramsets)
             if(allocated(arr_params_set(ipft)%sel_paramsets)) deallocate(arr_params_set(ipft)%sel_paramsets)
+            if(allocated(arr_params_set(ipft)%upg_paramsets)) deallocate(arr_params_set(ipft)%upg_paramsets)
         enddo
         if(allocated(arr_params_set)) deallocate(arr_params_set)
 

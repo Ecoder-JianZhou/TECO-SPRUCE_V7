@@ -61,6 +61,13 @@ module mcmc_mod
         real, allocatable :: coefac(:)
     end type params_DApar
     type(params_DApar), allocatable :: mc_DApar(:)          ! all variables for DATA ASSIMILATION
+    type(nml_params_data_type),allocatable     :: mc_in_params(:)     !   in_params for MCMC
+    type(nml_initValue_data_type), allocatable :: mc_init_params(:)   ! init_params for MCMC
+
+    type params_sets
+        real, allocatable :: tot_paramsets(:,:), upg_paramsets(:,:), sel_paramsets(:,:) 
+    end type params_sets
+    type(params_sets), allocatable :: arr_params_set(:)
 
     ! type(nml_params_data_type) :: in_params, in_parval, in_parval_min, in_parval_max
     ! real, allocatable :: parval(:), parmin(:), parmax(:)
@@ -923,7 +930,7 @@ module mcmc_mod
         call GetSimuData_var(vars4MCMC%photo_shrub_d, outVars_d%allSpec(2)%gpp*24) 
         call GetSimuData_var(vars4MCMC%photo_tree_d,  outVars_d%allSpec(1)%gpp*24) 
         ! ----------------------------------------------------------------------------
-        call update_mcmc_tot_outputs(tot_paramsets_outs_d, outVars_d, nDay)
+        ! call update_mcmc_tot_outputs(tot_paramsets_outs_d, outVars_d, nDay)
     end subroutine GetSimuData
 
     subroutine GetSimuData_var(var_obsData, var_mdData)
